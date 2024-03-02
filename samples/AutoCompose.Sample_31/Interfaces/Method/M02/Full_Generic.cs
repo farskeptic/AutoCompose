@@ -1,0 +1,33 @@
+﻿using AutoCompose.Generator.Attributes;
+
+namespace AutoCompose.Sample_31.Interfaces.Method.M02
+{
+    public interface ISampleM02
+    {
+        TOut Method1<TIn, TOut>(int nVal, bool bVal, string sVal, TIn sample) where TIn : notnull, new()
+            where TOut : class?, new();
+
+        TOut Method2<TIn, TOut>(int nVal, bool bVal, string sVal, TIn sample) where TIn : notnull, new()
+            where TOut : struct;
+
+        int MethodUnmanaged<T>(T sample) where T : unmanaged;
+        int MethodInterface<T>(T sample) where T : ISampleM02;
+        int MethodInterfaceNullable<T>(T sample) where T : ISampleM02?, new();
+        int MethodClass<T>(T sample) where T : SampleM02;
+        int MethodClassNullable<T>(T sample) where T : SampleM02?;
+        int MethodTU<T, U>(T sample, U sample2) where T : U where U : new();
+        int MethodStruct<T>(T sample) where T : struct;
+    }
+
+    [AutoCompose(typeof(ISampleM02), "_sample")]
+    public partial class SampleM02 : ISampleM02
+    {
+        protected readonly ISampleM02 _sample;
+
+        public SampleM02(ISampleM02 sample)
+        {
+            _sample = sample;
+        }
+
+    }
+}

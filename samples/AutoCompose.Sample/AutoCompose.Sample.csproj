@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Farskeptic.AutoCompose" Version="0.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutoCompose.Sample_20\AutoCompose.Sample_20.csproj" />
+    <ProjectReference Include="..\AutoCompose.Sample_21\AutoCompose.Sample_21.csproj" />
+    <ProjectReference Include="..\AutoCompose.Sample_31\AutoCompose.Sample_31.csproj" />
+    <ProjectReference Include="..\AutoCompose.Sample_50\AutoCompose.Sample_50.csproj" />
+    <ProjectReference Include="..\AutoCompose.Sample_60\AutoCompose.Sample_60.csproj" />
+    <ProjectReference Include="..\AutoCompose.Sample_70\AutoCompose.Sample_70.csproj" />
+    <ProjectReference Include="..\AutoCompose.Sample_80\AutoCompose.Sample_80.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

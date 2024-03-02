@@ -1,0 +1,111 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompose.Generator", "AutoCompose.Generator\AutoCompose.Generator.csproj", "{BDDF5239-616E-4BDB-BABF-983E6A23B327}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompose.Tests", "..\tests\AutoCompose.Tests\AutoCompose.Tests.csproj", "{B0FB425C-31D9-49A1-9DA8-DB0F001E98DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8F55DB0E-274E-4BBB-AC03-6AF01ED0CD1F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1348A3AA-F228-430B-AC2D-F8649DEAB859}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_scripts", "_scripts", "{BD9F4382-19C9-4C4C-9391-4887FD5104A2}"
+	ProjectSection(SolutionItems) = preProject
+		..\AutoCompose.scaffolding.bat = ..\AutoCompose.scaffolding.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D7649218-D15C-4EFF-90F1-E485046E492E}"
+	ProjectSection(SolutionItems) = preProject
+		..\samples\AutoCompose.samples.scaffolding.bat = ..\samples\AutoCompose.samples.scaffolding.bat
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompose.Sample", "..\samples\AutoCompose.Sample\AutoCompose.Sample.csproj", "{13968A2E-278F-45C4-9711-ECE99AA45B5F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompose.Sample_20", "..\samples\AutoCompose.Sample_20\AutoCompose.Sample_20.csproj", "{DA27CEDD-CF51-4DF2-B740-E971B084817B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompose.Sample_21", "..\samples\AutoCompose.Sample_21\AutoCompose.Sample_21.csproj", "{38DEABD1-0EE9-43EE-B17D-6139A69BBECA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompose.Sample_31", "..\samples\AutoCompose.Sample_31\AutoCompose.Sample_31.csproj", "{975A739C-F376-4768-A5CE-397AEB615E9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompose.Sample_50", "..\samples\AutoCompose.Sample_50\AutoCompose.Sample_50.csproj", "{9072F1DB-C51A-4C43-B461-4DF7843DBBD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompose.Sample_60", "..\samples\AutoCompose.Sample_60\AutoCompose.Sample_60.csproj", "{BA4FA0B0-11F5-4737-9CF4-7177673C5191}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompose.Sample_70", "..\samples\AutoCompose.Sample_70\AutoCompose.Sample_70.csproj", "{4A32099C-4E22-4C3C-83B9-844BB9222A3D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoCompose.Sample_80", "..\samples\AutoCompose.Sample_80\AutoCompose.Sample_80.csproj", "{BACF9304-B0D8-42E2-930F-740B67EB74D1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F49F935C-3059-41E3-BBDE-E9DDC21E2525}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDDF5239-616E-4BDB-BABF-983E6A23B327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDDF5239-616E-4BDB-BABF-983E6A23B327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDDF5239-616E-4BDB-BABF-983E6A23B327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDDF5239-616E-4BDB-BABF-983E6A23B327}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0FB425C-31D9-49A1-9DA8-DB0F001E98DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0FB425C-31D9-49A1-9DA8-DB0F001E98DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0FB425C-31D9-49A1-9DA8-DB0F001E98DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0FB425C-31D9-49A1-9DA8-DB0F001E98DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13968A2E-278F-45C4-9711-ECE99AA45B5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13968A2E-278F-45C4-9711-ECE99AA45B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13968A2E-278F-45C4-9711-ECE99AA45B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13968A2E-278F-45C4-9711-ECE99AA45B5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA27CEDD-CF51-4DF2-B740-E971B084817B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA27CEDD-CF51-4DF2-B740-E971B084817B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA27CEDD-CF51-4DF2-B740-E971B084817B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA27CEDD-CF51-4DF2-B740-E971B084817B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38DEABD1-0EE9-43EE-B17D-6139A69BBECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38DEABD1-0EE9-43EE-B17D-6139A69BBECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38DEABD1-0EE9-43EE-B17D-6139A69BBECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38DEABD1-0EE9-43EE-B17D-6139A69BBECA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{975A739C-F376-4768-A5CE-397AEB615E9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{975A739C-F376-4768-A5CE-397AEB615E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{975A739C-F376-4768-A5CE-397AEB615E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{975A739C-F376-4768-A5CE-397AEB615E9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9072F1DB-C51A-4C43-B461-4DF7843DBBD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9072F1DB-C51A-4C43-B461-4DF7843DBBD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9072F1DB-C51A-4C43-B461-4DF7843DBBD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9072F1DB-C51A-4C43-B461-4DF7843DBBD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA4FA0B0-11F5-4737-9CF4-7177673C5191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA4FA0B0-11F5-4737-9CF4-7177673C5191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA4FA0B0-11F5-4737-9CF4-7177673C5191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA4FA0B0-11F5-4737-9CF4-7177673C5191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A32099C-4E22-4C3C-83B9-844BB9222A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A32099C-4E22-4C3C-83B9-844BB9222A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A32099C-4E22-4C3C-83B9-844BB9222A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A32099C-4E22-4C3C-83B9-844BB9222A3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BACF9304-B0D8-42E2-930F-740B67EB74D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BACF9304-B0D8-42E2-930F-740B67EB74D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BACF9304-B0D8-42E2-930F-740B67EB74D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BACF9304-B0D8-42E2-930F-740B67EB74D1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BDDF5239-616E-4BDB-BABF-983E6A23B327} = {1348A3AA-F228-430B-AC2D-F8649DEAB859}
+		{B0FB425C-31D9-49A1-9DA8-DB0F001E98DC} = {8F55DB0E-274E-4BBB-AC03-6AF01ED0CD1F}
+		{13968A2E-278F-45C4-9711-ECE99AA45B5F} = {D7649218-D15C-4EFF-90F1-E485046E492E}
+		{DA27CEDD-CF51-4DF2-B740-E971B084817B} = {D7649218-D15C-4EFF-90F1-E485046E492E}
+		{38DEABD1-0EE9-43EE-B17D-6139A69BBECA} = {D7649218-D15C-4EFF-90F1-E485046E492E}
+		{975A739C-F376-4768-A5CE-397AEB615E9A} = {D7649218-D15C-4EFF-90F1-E485046E492E}
+		{9072F1DB-C51A-4C43-B461-4DF7843DBBD1} = {D7649218-D15C-4EFF-90F1-E485046E492E}
+		{BA4FA0B0-11F5-4737-9CF4-7177673C5191} = {D7649218-D15C-4EFF-90F1-E485046E492E}
+		{4A32099C-4E22-4C3C-83B9-844BB9222A3D} = {D7649218-D15C-4EFF-90F1-E485046E492E}
+		{BACF9304-B0D8-42E2-930F-740B67EB74D1} = {D7649218-D15C-4EFF-90F1-E485046E492E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D26740DE-01A2-49AC-A137-520FA08E1429}
+	EndGlobalSection
+EndGlobal

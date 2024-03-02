@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Authors>Farskeptic</Authors>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <Nullable>disable</Nullable>
+        <IsRoslynComponent>true</IsRoslynComponent>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>Generated\$(TargetFramework)</CompilerGeneratedFilesOutputPath>
+        <LangVersion>latest</LangVersion>
+        <PackageId>Farskeptic.AutoCompose</PackageId>
+        <PackageVersion>0.0.3</PackageVersion>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <PackageOutputPath>C:\DevTools\NuGetPackages</PackageOutputPath>
+        <NoPackageAnalysis>true</NoPackageAnalysis>
+        <EnablePackageValidation>true</EnablePackageValidation>
+        <!--<PackageLicenseExpression>MIT</PackageLicenseExpression>-->
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryUrl>https://github.com/farskeptic/AutoCompose</RepositoryUrl>
+        <!--<PackageProjectUrl>https://github.com/farskeptic/AutoCompose</PackageProjectUrl>-->
+        <PackageProjectUrl>https://www.nuget.org/packages/Farskeptic.AutoCompose</PackageProjectUrl>
+        <PackageDescription>
+            A .NET source generator that enables composition without having to implement pass-thru code.
+            No runtime reflection.
+        </PackageDescription>
+        <PackageTags>Composition SourceGenerator</PackageTags>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+        <None Include="..\..\docs\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Include="..\..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+        <!--Exclude the output of source generators from the compilation-->
+        <!--<Compile Remove="$(CompilerGeneratedFilesOutputPath)/**/*.cs" />-->
+
+        <None Remove="Templates\ClassTemplate.txt" />
+
+        <None Remove="Templates\MethodTemplate.txt" />
+
+        <None Remove="Templates\PropertyTemplate.txt" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Templates/ClassTemplate.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Templates\PropertyTemplate.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Templates\MethodTemplate.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+    </ItemGroup>
+
+</Project>

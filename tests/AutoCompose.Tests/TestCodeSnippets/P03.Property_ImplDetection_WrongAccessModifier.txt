@@ -1,0 +1,22 @@
+﻿AutoCompose.Generator.Attributes
+
+namespace AutoCompose.Tests.TestClasses
+{
+    public interface ISample
+    {
+        int Prop1 { get; set; }
+    }
+
+    [AutoCompose(typeof(ISample), "_sample")]
+    public class Bleck: ISample
+    {
+        protected readonly ISample _sample;
+
+        protected int Prop1 { get; set; }
+
+        public Bleck(ISample sample)
+        {
+            _sample = sample;
+        }
+    }
+}

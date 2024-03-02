@@ -1,0 +1,22 @@
+﻿AutoCompose.Generator.Attributes
+
+namespace AutoCompose.Sample.P04
+{
+    public interface ISampleP04
+    {
+        int Prop1 { get; set; }
+    }
+
+    [AutoCompose(typeof(ISampleP04), "_sample")]
+    public partial class SampleP04 : ISampleP04
+    {
+        protected readonly ISampleP04 _sample;
+
+        public bool Prop1 { get; set; }
+
+        public SampleP04(ISampleP04 sample)
+        {
+            _sample = sample;
+        }
+    }
+}
