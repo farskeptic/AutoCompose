@@ -2,7 +2,7 @@
 
 [![Nuget](https://img.shields.io/nuget/v/FarSkeptic.AutoCompose?style=flat-square)](https://www.nuget.org/packages/FarSkeptic.AutoCompose/)
 [![Nuget Preview](https://img.shields.io/nuget/vpre/FarSkeptic.AutoCompose?style=flat-square&label=nuget%20preview)](https://www.nuget.org/packages/FarSkeptic.AutoCompose/)
-[![License](https://img.shields.io/github/license/farskeptic/AutoCompose?style=flat-square)](https://github.com/farskeptic/autocompose/LICENSE)
+[![License](https://img.shields.io/github/license/farskeptic/AutoCompose?style=flat-square)](https://github.com/farskeptic/AutoCompose/blob/main/LICENSE)
 [![Downloads](https://img.shields.io/nuget/dt/FarSkeptic.AutoCompose?style=flat-square)](https://www.nuget.org/packages/FarSkeptic.AutoCompose/)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/farskeptic)](https://github.com/sponsors/farskeptic)
 [![GitHub](https://img.shields.io/badge/-source-181717.svg?logo=GitHub)](https://github.com/farskeptic/autocompose)
