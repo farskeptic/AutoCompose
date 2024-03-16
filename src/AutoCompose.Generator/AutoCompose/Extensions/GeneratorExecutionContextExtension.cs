@@ -20,6 +20,10 @@ namespace AutoCompose.Generator.AutoCompose.Extensions
         {
             var attributes = autoComposedClass.AttributeLists.SelectMany(y => y.Attributes).ToList();
 
+            if (!attributes.Any(x => x.Name.ToString() == Constants.AutoCompose)) {
+                throw new ArgumentException("Class must be decorated with an AutoComposeAttribute.");
+            }
+
             AttributeArgumentSyntax typeofType;
             string memberName = string.Empty;
             try
@@ -28,7 +32,7 @@ namespace AutoCompose.Generator.AutoCompose.Extensions
             }
             catch (Exception)
             {
-                throw new ArgumentException("Error finding typeof expression for AutoComposeAttribute.TargetType.  Please ensure you have provided an attribute like: typeof(ISample)");
+                throw new ArgumentNullException("Error finding typeof expression for AutoComposeAttribute.TargetType.  Please ensure you have provided an attribute like: typeof(ISample)");
             }
 
             try
@@ -49,12 +53,12 @@ namespace AutoCompose.Generator.AutoCompose.Extensions
                 }
                 if (string.IsNullOrEmpty(memberName))
                 {
-                    throw new ArgumentException("Error finding string literal or nameof expression for AutoComposeAttribute.MemberName.  Please ensure you have provided an attribute as either \"_sample\" or nameof(_sample)");
+                    throw new ArgumentNullException("Error finding string literal or nameof expression for AutoComposeAttribute.MemberName.  Please ensure you have provided an attribute as either \"_sample\" or nameof(_sample)");
                 }
             }
             catch (Exception)
             {
-                throw new ArgumentException("Error finding string literal or nameof expression for AutoComposeAttribute.MemberName.  Please ensure you have provided an attribute as either \"_sample\" or nameof(_sample)");
+                throw new ArgumentNullException("Error finding string literal or nameof expression for AutoComposeAttribute.MemberName.  Please ensure you have provided an attribute as either \"_sample\" or nameof(_sample)");
             }
 
             if (typeofType.Expression.ChildNodes().Any())

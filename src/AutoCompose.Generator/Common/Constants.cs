@@ -7,6 +7,7 @@ namespace AutoCompose.Generator.Common
     public class Constants
     {
         public const string Attribute = "Attribute";
+        public const string AutoCompose = "AutoCompose";
         public const string AutoComposeAttribute = "AutoComposeAttribute";
         public const string Class = "class";
         public const string NewConstraint = "new()";
@@ -37,6 +38,7 @@ namespace AutoCompose.Generator.Common
             public const string ReturnStatement = "<<ReturnStatement>>";
             public const string ReturnType = "<<ReturnType>>";
             public const string SetStatement = "<<SetStatement>>";
+            public const string AccessModifier = "<<AccessModifier>>";
         }
     }
 }

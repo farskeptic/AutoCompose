@@ -108,6 +108,7 @@ namespace AutoCompose.Generator.AutoCompose
             _autoComposedSymbol = context.GetSymbol(_autoComposedClass);
             _renderModel.ContainingClassName = _autoComposedSymbol.Name;
             _renderModel.ContainingNamespace = _autoComposedSymbol.ContainingNamespace.ToDisplayString();
+            _renderModel.AccessModifier = _autoComposedSymbol.DeclaredAccessibility.ToString().ToLower();
 
             // get all of the members (methods and properties) from the targetSymbol (e.g. ISample)
             var targetMembers = _targetSymbol.GetMembers();

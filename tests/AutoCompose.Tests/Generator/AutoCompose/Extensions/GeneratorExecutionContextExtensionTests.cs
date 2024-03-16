@@ -32,9 +32,38 @@ namespace AutoCompose.Tests.Generator.AutoCompose.Extensions
 
             // act..
             // assert..
-            var ex = Assert.Throws<ArgumentNullException>(() => (otherClass.GetAutoComposeInfo()));
-            Assert.Contains("TypeOfExpressionSyntax", ex.Message);
+            var ex = Assert.Throws<ArgumentException>(() => (otherClass.GetAutoComposeInfo()));
+            Assert.Contains("Class must be decorated with an AutoComposeAttribute.", ex.Message);
         }
 
+        [Fact]
+        public void GetAutoComposeInfo_Throws_WhenBadInvocationUsed()
+        {
+            // arrange..
+            var className = "MyClass";
+            var code = TestFixture.GetSimpleSourceCode(className);
+            var api = SyntaxApi.Create(code);
+            var otherClass = api.GetClassDeclarationSyntax("BadNameOfClass");
+
+            // act..
+            // assert..
+            var ex = Assert.Throws<ArgumentNullException>(() => (otherClass.GetAutoComposeInfo()));
+            Assert.Contains("Error finding string literal or nameof expression for AutoComposeAttribute.MemberName", ex.Message);
+        }
+
+        [Fact]
+        public void GetAutoComposeInfo_Throws_WhenMissingTypeof()
+        {
+            // arrange..
+            var className = "MyClass";
+            var code = TestFixture.GetSimpleSourceCode(className);
+            var api = SyntaxApi.Create(code);
+            var otherClass = api.GetClassDeclarationSyntax("MissingTypeofClass");
+
+            // act..
+            // assert..
+            var ex = Assert.Throws<ArgumentNullException>(() => (otherClass.GetAutoComposeInfo()));
+            Assert.Contains("Error finding typeof expression for AutoComposeAttribute.TargetType", ex.Message);
+        }
     }
 }

@@ -42,6 +42,7 @@ namespace AutoCompose.Tests.Generator.Common
         [InlineData("X02.Sample")]
         [InlineData("X03.Sample01")]
         [InlineData("A01.Nameof_Target")]
+        [InlineData("A02.InternalClassGeneration")]
 
         // ToDo: C#.NET has trouble with this one - doesn't detect the mismatches
         // [InlineData("Method_ImplDetection_WrongGenericConstraint")]

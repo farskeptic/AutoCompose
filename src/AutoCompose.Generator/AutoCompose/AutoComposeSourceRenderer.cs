@@ -64,6 +64,7 @@ namespace AutoCompose.Generator.AutoCompose
                 .Replace(Constants.Tags.ContainingClassName, model.ContainingClassName)
                 .Replace(Constants.Tags.Properties, propertyContent)
                 .Replace(Constants.Tags.Methods, methodContent)
+                .Replace(Constants.Tags.AccessModifier, model.AccessModifier)
                 ;
 
             return content;

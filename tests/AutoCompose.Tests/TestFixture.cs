@@ -40,6 +40,25 @@ namespace {className}.ClassNamespace
     {{
         public void Test() {{ }}
     }}
+
+    [AutoCompose(nameof(m_sample), typeof(ISample))]
+    public class NameOfClass
+    {{
+    
+    }}
+
+    [AutoCompose(other(m_sample), typeof(ISample))]
+    public class BadNameOfClass
+    {{
+    
+    }}
+
+    [AutoCompose(""_sample"")]
+    public class MissingTypeofClass
+    {{
+    
+    }}
+
 }}
             ";
         }

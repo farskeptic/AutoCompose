@@ -6,7 +6,7 @@
 
 namespace <<ContainingNamespace>>
 {
-    public partial class <<ContainingClassName>>
+    <<AccessModifier>> partial class <<ContainingClassName>>
     {
 <<Properties>>
 <<Methods>>

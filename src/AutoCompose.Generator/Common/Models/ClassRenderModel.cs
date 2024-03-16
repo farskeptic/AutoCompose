@@ -12,5 +12,6 @@ namespace AutoCompose.Generator.Common.Models
         public List<PropertyModel> Properties { get; } = new();
         public string ContainingNamespace { get; set; }
         public string ContainingClassName { get; set; }
+        public string AccessModifier { get; set; }
     }
 }

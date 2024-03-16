@@ -10,7 +10,7 @@
         <CompilerGeneratedFilesOutputPath>Generated\$(TargetFramework)</CompilerGeneratedFilesOutputPath>
         <LangVersion>latest</LangVersion>
         <PackageId>Farskeptic.AutoCompose</PackageId>
-        <PackageVersion>1.0.0</PackageVersion>
+        <PackageVersion>1.0.1</PackageVersion>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <PackageOutputPath>C:\DevTools\NuGetPackages</PackageOutputPath>
         <NoPackageAnalysis>true</NoPackageAnalysis>
@@ -26,7 +26,7 @@
             A .NET source generator that enables composition without having to implement pass-thru code.
             No runtime reflection.
         </PackageDescription>
-        <PackageTags>Composition SourceGenerator</PackageTags>
+        <PackageTags>Auto;Compose;AutoCompose;Composition;SourceGenerator;farskeptic;farskeptic.AutoCompose</PackageTags>
     </PropertyGroup>
 
 
