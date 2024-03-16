@@ -1,0 +1,21 @@
+﻿AutoCompose.Generator.Attributes
+
+namespace AutoCompose.Sample.A01
+{
+    public interface ISampleA01
+    {
+        int Method1();
+    }
+
+    [AutoCompose(typeof(ISampleA01), nameof(_sample))]
+    public partial class SampleA01 : ISampleA01
+    {
+        protected readonly ISampleA01 _sample;
+
+        public SampleA01(ISampleA01 sample)
+        {
+            _sample = sample;
+        }
+
+    }
+}

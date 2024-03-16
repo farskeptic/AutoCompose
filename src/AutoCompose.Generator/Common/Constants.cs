@@ -17,6 +17,7 @@ namespace AutoCompose.Generator.Common
         public const string Struct = "struct";
         public const string Unmanaged = "unmanaged";
         public const string Virtual = "virtual";
+        public const string NameOf = "nameof";
 
         public class Tags
         {

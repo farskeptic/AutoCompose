@@ -41,6 +41,7 @@ namespace AutoCompose.Tests.Generator.Common
         [InlineData("X01.Decoy_Attribute")] // Note: This test should not generate anything
         [InlineData("X02.Sample")]
         [InlineData("X03.Sample01")]
+        [InlineData("A01.Nameof_Target")]
 
         // ToDo: C#.NET has trouble with this one - doesn't detect the mismatches
         // [InlineData("Method_ImplDetection_WrongGenericConstraint")]

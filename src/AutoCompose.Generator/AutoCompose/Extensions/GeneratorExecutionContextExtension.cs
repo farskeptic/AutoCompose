@@ -1,4 +1,5 @@
 ﻿using AutoCompose.Generator.AutoCompose.Models;
+using AutoCompose.Generator.Common;
 using AutoCompose.Generator.Common.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -19,11 +20,42 @@ namespace AutoCompose.Generator.AutoCompose.Extensions
         {
             var attributes = autoComposedClass.AttributeLists.SelectMany(y => y.Attributes).ToList();
 
-            var typeofType = GetAttributeArgumentOfType<TypeOfExpressionSyntax>(attributes).GuardNull(nameof(TypeOfExpressionSyntax));
+            AttributeArgumentSyntax typeofType;
+            string memberName = string.Empty;
+            try
+            {
+                typeofType = GetAttributeArgumentOfType<TypeOfExpressionSyntax>(attributes).GuardNull(nameof(TypeOfExpressionSyntax));
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("Error finding typeof expression for AutoComposeAttribute.TargetType.  Please ensure you have provided an attribute like: typeof(ISample)");
+            }
 
-            var composingMember = GetAttributeArgumentOfType<LiteralExpressionSyntax>(attributes).GuardNull();
-
-            var memberName = composingMember.Expression.ToString().Replace("\"", string.Empty);
+            try
+            {
+                var composingMemberLiteral = GetAttributeArgumentOfType<LiteralExpressionSyntax>(attributes);
+                var composingMemberNameOf = GetAttributeArgumentOfType<InvocationExpressionSyntax>(attributes);
+                if (composingMemberLiteral is not null)
+                {
+                    memberName = composingMemberLiteral.Expression.ToString().Replace("\"", string.Empty);
+                }
+                else if (composingMemberNameOf is not null)
+                {
+                    var invocationExpression = composingMemberNameOf.Expression.GuardType<InvocationExpressionSyntax>();
+                    if (invocationExpression.Expression.ToString() == Constants.NameOf)
+                    {
+                        memberName = invocationExpression.ArgumentList.Arguments.ToString();
+                    }
+                }
+                if (string.IsNullOrEmpty(memberName))
+                {
+                    throw new ArgumentException("Error finding string literal or nameof expression for AutoComposeAttribute.MemberName.  Please ensure you have provided an attribute as either \"_sample\" or nameof(_sample)");
+                }
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("Error finding string literal or nameof expression for AutoComposeAttribute.MemberName.  Please ensure you have provided an attribute as either \"_sample\" or nameof(_sample)");
+            }
 
             if (typeofType.Expression.ChildNodes().Any())
             {

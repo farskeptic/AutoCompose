@@ -46,7 +46,17 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="TestCodeSnippets\A01.Nameof_Target.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\..\src\AutoCompose.Generator\AutoCompose.Generator.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="TestCodeSnippets\A01.Nameof_Target.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
