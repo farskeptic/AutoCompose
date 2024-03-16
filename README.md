@@ -59,6 +59,8 @@ Any time you want to use composition, and have at least one property or method t
 # Known Limitations
 
 1. AutoCompose currently works for interfaces only.  It DOES NOT work (yet) for abstract classes.
+1. Both classes and interfaces must be public (for now).  
+1. Using nameof(x) is not supported (yet). So [AutoCompose(typeof(ISample), nameof(_sample))] does not work
 1. AutoCompose may not work if your code has multiple definitions of an interface with the same name.  AutoCompose (currently) just picks the first matching symbol, and so does not discriminate the target-interface based purely on namespaces.
 1. If your code contains extremely deep namespaces and would generate source code files with very long names, then there can be filename-length conflicts with the windows file system.
 

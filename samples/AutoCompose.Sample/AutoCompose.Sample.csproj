@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Farskeptic.AutoCompose" Version="0.0.3" />
+    <PackageReference Include="Farskeptic.AutoCompose" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
