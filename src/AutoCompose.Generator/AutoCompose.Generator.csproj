@@ -10,7 +10,7 @@
         <CompilerGeneratedFilesOutputPath>Generated\$(TargetFramework)</CompilerGeneratedFilesOutputPath>
         <LangVersion>latest</LangVersion>
         <PackageId>Farskeptic.AutoCompose</PackageId>
-        <PackageVersion>1.0.1</PackageVersion>
+        <PackageVersion>1.0.2</PackageVersion>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <PackageOutputPath>C:\DevTools\NuGetPackages</PackageOutputPath>
         <NoPackageAnalysis>true</NoPackageAnalysis>
@@ -31,7 +31,7 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.6.0" PrivateAssets="all" />
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
     </ItemGroup>
 
