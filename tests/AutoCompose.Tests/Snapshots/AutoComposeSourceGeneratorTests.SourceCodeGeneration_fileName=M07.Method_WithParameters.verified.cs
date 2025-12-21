@@ -11,7 +11,7 @@ namespace AutoCompose.Sample.M07
     {
 
 
-        public virtual int Method1(int nVal, bool bVal, string sVal, ISampleM07 sample)
+        public virtual int Method1(int nVal, bool bVal, string sVal, AutoCompose.Sample.M07.ISampleM07 sample)
         {
             return _sample.Method1(nVal, bVal, sVal, sample);
         }

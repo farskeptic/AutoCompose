@@ -13,7 +13,7 @@ namespace AutoCompose.Sample.M08D
     {
 
 
-        public virtual int Method2(ISample1M08A sample1, ISample2M08B sample2)
+        public virtual int Method2(AutoCompose.Sample.M08A.ISample1M08A sample1, AutoCompose.Sample.M08B.ISample2M08B sample2)
         {
             return _sample3.Method2(sample1, sample2);
         }

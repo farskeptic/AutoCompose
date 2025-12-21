@@ -30,7 +30,7 @@ namespace AutoCompose.Host.Providers
         }
 
 
-        public virtual int Method3(int val1, bool val2, ref string val3, out IBaseA val4)
+        public virtual int Method3(int val1, bool val2, ref string val3, out AutoCompose.Sample.X03.IBaseA val4)
         {
             return _baseA.Method3(val1, val2, ref val3, out val4);
         }

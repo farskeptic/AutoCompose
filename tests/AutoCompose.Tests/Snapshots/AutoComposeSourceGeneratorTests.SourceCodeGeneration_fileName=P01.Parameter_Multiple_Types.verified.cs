@@ -17,7 +17,7 @@ namespace AutoCompose.Sample.P01C
         }
 
 
-        public virtual int MethodB(IParameterSample parameterSample)
+        public virtual int MethodB(AutoCompose.Sample.P01B.IParameterSample parameterSample)
         {
             return _sample.MethodB(parameterSample);
         }
