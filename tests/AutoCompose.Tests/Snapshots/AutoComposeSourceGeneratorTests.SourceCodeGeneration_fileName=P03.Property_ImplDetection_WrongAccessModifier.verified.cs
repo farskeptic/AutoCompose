@@ -10,7 +10,7 @@ namespace AutoCompose.Tests.TestClasses
     public partial class Bleck
     {
 
-        public virtual int Prop1 {  get { return _sample.Prop1; }  set { _sample.Prop1 = value; } }
+        public virtual int Prop1 { get { return _sample.Prop1; } set { _sample.Prop1 = value; } }
 
 
 

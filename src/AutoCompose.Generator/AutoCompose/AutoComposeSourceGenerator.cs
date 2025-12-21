@@ -43,19 +43,59 @@ namespace AutoCompose.Generator.AutoCompose
 
             foreach (var autoComposedClass in syntaxReceiver.Classes)
             {
-                // parse the symbol
-                var model = AutoComposeSourceParser.Parse(contextWrapper, autoComposedClass);
+                try
+                {
+                    // parse the symbol
+                    var model = AutoComposeSourceParser.Parse(contextWrapper, autoComposedClass);
 
-                // render the content
-                var renderer = AutoComposeSourceRenderer.Create();
-                var content = renderer.Render(model);
+                    // render the content
+                    var renderer = AutoComposeSourceRenderer.Create();
+                    var content = renderer.Render(model);
 
-                // write the file
-                var rawPath = autoComposedClass.SyntaxTree.FilePath;
-                var fileName = Path.GetFileNameWithoutExtension(rawPath);
-                var genPath = model.ContainingNamespace.Replace(".", "\\");
+                    // write the file
+                    var rawPath = autoComposedClass.SyntaxTree.FilePath;
+                    var fileName = Path.GetFileNameWithoutExtension(rawPath);
+                    var genPath = model.ContainingNamespace.Replace(".", "\\");
 
-                context.AddSource($"{genPath}.{fileName}.g.cs", content);
+                    context.AddSource($"{genPath}.{fileName}.g.cs", content);
+                }
+                catch (Exception ex)
+                {
+                    // Report a diagnostic with meaningful error information
+                    var location = autoComposedClass.GetLocation();
+                    var className = autoComposedClass.Identifier.ValueText;
+                    var filePath = autoComposedClass.SyntaxTree.FilePath;
+                    
+                    // Build a comprehensive error message with full exception details
+                    var errorMessage = ex.Message;
+                    if (ex.InnerException is not null)
+                    {
+                        errorMessage += $" Inner exception: {ex.InnerException.Message}";
+                    }
+                    
+                    // Include stack trace in description for debugging
+                    var description = $"An error occurred while generating AutoCompose code for class '{className}' in file '{filePath}'. " +
+                                     $"Exception type: {ex.GetType().Name}. " +
+                                     $"Stack trace: {ex.StackTrace}";
+                    
+                    var descriptor = new DiagnosticDescriptor(
+                        id: "AC001",
+                        title: "AutoCompose Generation Error",
+                        messageFormat: "AutoCompose failed for class '{0}' in {1}: {2}",
+                        category: "AutoCompose",
+                        DiagnosticSeverity.Error,
+                        isEnabledByDefault: true,
+                        description: description);
+
+                    var diagnostic = Diagnostic.Create(
+                        descriptor,
+                        location,
+                        className,
+                        Path.GetFileName(filePath),
+                        errorMessage);
+
+                    context.ReportDiagnostic(diagnostic);
+                }
             }
         }
 

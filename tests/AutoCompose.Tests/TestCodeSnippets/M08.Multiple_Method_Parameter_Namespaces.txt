@@ -1,4 +1,4 @@
-﻿AutoCompose.Generator.Attributes
+﻿using AutoCompose.Generator.Attributes;
 using AutoCompose.Sample.M08A;
 using AutoCompose.Sample.M08B;
 using AutoCompose.Sample.M08C;

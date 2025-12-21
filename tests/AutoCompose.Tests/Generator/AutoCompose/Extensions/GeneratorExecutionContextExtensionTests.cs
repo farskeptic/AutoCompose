@@ -1,5 +1,6 @@
 ﻿using AutoCompose.Generator.AutoCompose.Extensions;
 using AutoCompose.Generator.Common.Fluent;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace AutoCompose.Tests.Generator.AutoCompose.Extensions
 {
@@ -13,9 +14,11 @@ namespace AutoCompose.Tests.Generator.AutoCompose.Extensions
             var code = TestFixture.GetSimpleSourceCode(className);
             var api = SyntaxApi.Create(code);
             var autoComposedClass = api.GetClassDeclarationSyntax(className);
+            var syntaxTree = CSharpSyntaxTree.ParseText(code);
+            var context = TestFixture.CreateFakeGeneratorExecutionContext(syntaxTree, className);
 
             // act..
-            var actual = autoComposedClass.GetAutoComposeInfo();
+            var actual = autoComposedClass.GetAutoComposeInfo(context);
             // assert..
             Assert.Equal("m_sample", actual.MemberName);
             Assert.Equal("ISample", actual.TargetType);
@@ -29,11 +32,13 @@ namespace AutoCompose.Tests.Generator.AutoCompose.Extensions
             var code = TestFixture.GetSimpleSourceCode(className);
             var api = SyntaxApi.Create(code);
             var otherClass = api.GetClassDeclarationSyntax("OtherClass");
+            var syntaxTree = CSharpSyntaxTree.ParseText(code);
+            var context = TestFixture.CreateFakeGeneratorExecutionContext(syntaxTree, className);
 
             // act..
             // assert..
-            var ex = Assert.Throws<ArgumentException>(() => (otherClass.GetAutoComposeInfo()));
-            Assert.Contains("Class must be decorated with an AutoComposeAttribute.", ex.Message);
+            var ex = Assert.Throws<ArgumentException>(() => (otherClass.GetAutoComposeInfo(context)));
+            Assert.Contains("Class 'OtherClass' must be decorated with an AutoComposeAttribute", ex.Message);
         }
 
         [Fact]
@@ -44,11 +49,13 @@ namespace AutoCompose.Tests.Generator.AutoCompose.Extensions
             var code = TestFixture.GetSimpleSourceCode(className);
             var api = SyntaxApi.Create(code);
             var otherClass = api.GetClassDeclarationSyntax("BadNameOfClass");
+            var syntaxTree = CSharpSyntaxTree.ParseText(code);
+            var context = TestFixture.CreateFakeGeneratorExecutionContext(syntaxTree, className);
 
             // act..
             // assert..
-            var ex = Assert.Throws<ArgumentNullException>(() => (otherClass.GetAutoComposeInfo()));
-            Assert.Contains("Error finding string literal or nameof expression for AutoComposeAttribute.MemberName", ex.Message);
+            var ex = Assert.Throws<ArgumentNullException>(() => (otherClass.GetAutoComposeInfo(context)));
+            Assert.Contains("Could not find string literal or nameof expression for member name", ex.Message);
         }
 
         [Fact]
@@ -59,11 +66,85 @@ namespace AutoCompose.Tests.Generator.AutoCompose.Extensions
             var code = TestFixture.GetSimpleSourceCode(className);
             var api = SyntaxApi.Create(code);
             var otherClass = api.GetClassDeclarationSyntax("MissingTypeofClass");
+            var syntaxTree = CSharpSyntaxTree.ParseText(code);
+            var context = TestFixture.CreateFakeGeneratorExecutionContext(syntaxTree, className);
 
             // act..
             // assert..
-            var ex = Assert.Throws<ArgumentNullException>(() => (otherClass.GetAutoComposeInfo()));
-            Assert.Contains("Error finding typeof expression for AutoComposeAttribute.TargetType", ex.Message);
+            var ex = Assert.Throws<ArgumentNullException>(() => (otherClass.GetAutoComposeInfo(context)));
+            Assert.Contains("Could not find string literal or nameof expression for member name", ex.Message);
+        }
+
+        [Fact]
+        public void GetAutoComposeInfo_Succeeds_WithStringTypeSyntax()
+        {
+            // arrange..
+            var className = "StringTypeClass";
+            var code = TestFixture.GetSourceCodeWithStringType(className);
+            var api = SyntaxApi.Create(code);
+            var autoComposedClass = api.GetClassDeclarationSyntax(className);
+            var syntaxTree = CSharpSyntaxTree.ParseText(code);
+            var context = TestFixture.CreateFakeGeneratorExecutionContext(syntaxTree, className);
+
+            // act..
+            var actual = autoComposedClass.GetAutoComposeInfo(context);
+            
+            // assert..
+            Assert.Equal("_sample", actual.MemberName);
+            Assert.Equal("ISample", actual.TargetType);
+        }
+
+        [Fact]
+        public void GetAutoComposeInfo_Succeeds_WithStringTypeAndNameOf()
+        {
+            // arrange..
+            var className = "StringTypeNameOfClass";
+            var code = TestFixture.GetSourceCodeWithStringTypeAndNameOf(className);
+            var api = SyntaxApi.Create(code);
+            var autoComposedClass = api.GetClassDeclarationSyntax(className);
+            var syntaxTree = CSharpSyntaxTree.ParseText(code);
+            var context = TestFixture.CreateFakeGeneratorExecutionContext(syntaxTree, className);
+
+            // act..
+            var actual = autoComposedClass.GetAutoComposeInfo(context);
+            
+            // assert..
+            Assert.Equal("_sample", actual.MemberName);
+            Assert.Equal("ISample", actual.TargetType);
+        }
+
+        [Fact]
+        public void GetAutoComposeInfo_Throws_WhenFirstArgumentIsNotTypeOrString()
+        {
+            // arrange..
+            var className = "InvalidFirstArgClass";
+            var code = TestFixture.GetSourceCodeWithInvalidFirstArgument(className);
+            var api = SyntaxApi.Create(code);
+            var otherClass = api.GetClassDeclarationSyntax(className);
+            var syntaxTree = CSharpSyntaxTree.ParseText(code);
+            var context = TestFixture.CreateFakeGeneratorExecutionContext(syntaxTree, className);
+
+            // act..
+            // assert..
+            var ex = Assert.Throws<ArgumentNullException>(() => (otherClass.GetAutoComposeInfo(context)));
+            Assert.Contains("First argument must be either typeof(Type) or a string literal", ex.Message);
+        }
+
+        [Fact]
+        public void GetAutoComposeInfo_Throws_WhenNoArguments()
+        {
+            // arrange..
+            var className = "NoArgsClass";
+            var code = TestFixture.GetSourceCodeWithNoArguments(className);
+            var api = SyntaxApi.Create(code);
+            var otherClass = api.GetClassDeclarationSyntax(className);
+            var syntaxTree = CSharpSyntaxTree.ParseText(code);
+            var context = TestFixture.CreateFakeGeneratorExecutionContext(syntaxTree, className);
+
+            // act..
+            // assert..
+            var ex = Assert.Throws<ArgumentNullException>(() => (otherClass.GetAutoComposeInfo(context)));
+            Assert.Contains("No arguments found in attribute", ex.Message);
         }
     }
 }

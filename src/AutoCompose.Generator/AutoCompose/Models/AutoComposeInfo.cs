@@ -1,4 +1,6 @@
-﻿namespace AutoCompose.Generator.AutoCompose.Models
+﻿using Microsoft.CodeAnalysis;
+
+namespace AutoCompose.Generator.AutoCompose.Models
 {
     /// <summary>
     /// The argument values of the AutoComposeAttribute, as string values.
@@ -20,11 +22,13 @@
     {
         public string TargetType { get; protected set; }
         public string MemberName { get; protected set; }
+        public INamedTypeSymbol TargetSymbol { get; protected set; }
 
-        public AutoComposeInfo(string targetType, string memberName)
+        public AutoComposeInfo(string targetType, string memberName, INamedTypeSymbol targetSymbol = null)
         {
             TargetType = targetType;
             MemberName = memberName;
+            TargetSymbol = targetSymbol;
         }
 
     }

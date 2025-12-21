@@ -45,5 +45,20 @@ namespace AutoCompose.Generator.Attributes
             MemberName = memberName;
         }
 
+        /// <summary>
+        ///   Constructor
+        ///   Takes the targetType as a string (e.g. "ISample") and the memberName
+        ///   The type will be resolved at compile time by the source generator
+        /// </summary>
+        /// <param name="targetTypeName">e.g. "ISample"</param>
+        /// <param name="memberName">e.g. m_sample</param>
+        public AutoComposeAttribute(string targetTypeName, string memberName)
+        {
+            // Note: TargetType will be null when using string constructor
+            // The source generator will resolve the type from the string name
+            TargetType = null;
+            MemberName = memberName;
+        }
+
     }
 }

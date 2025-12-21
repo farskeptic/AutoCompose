@@ -54,7 +54,11 @@ namespace AutoCompose.Generator.AutoCompose
         /// </summary>
         public string Render(ClassRenderModel model)
         {
-            var namespaceUsingStatements = string.Join("\r\n", model.NamespaceUsings.Where(x => x != model.ContainingNamespace).Distinct().OrderBy(x => x).Select(x => $"using {x};"));
+            var namespaceUsingStatements = string.Join("\r\n", model.NamespaceUsings
+                .Where(x => !string.IsNullOrWhiteSpace(x) && x != model.ContainingNamespace && x != "<global namespace>")
+                .Distinct()
+                .OrderBy(x => x)
+                .Select(x => $"using {x};"));
             var template = Templates["AutoCompose.Generator.Templates.ClassTemplate.txt"];
             var propertyContent = RenderProperties(model);
             var methodContent = RenderMethods(model);
@@ -106,7 +110,7 @@ namespace AutoCompose.Generator.AutoCompose
             {
                 var template = Templates["AutoCompose.Generator.Templates.PropertyTemplate.txt"];
 
-                var getStatement = property.HasGetter ? $" get {{ return {property.ComposingMemberName}.{property.Name}; }} " : string.Empty;
+                var getStatement = property.HasGetter ? $" get {{ return {property.ComposingMemberName}.{property.Name}; }}" : string.Empty;
                 var setStatement = property.HasSetter ? $" set {{ {property.ComposingMemberName}.{property.Name} = value; }}" : string.Empty;
 
                 var content = template

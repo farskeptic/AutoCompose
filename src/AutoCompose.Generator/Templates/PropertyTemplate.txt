@@ -1,2 +1,2 @@
 ﻿
-        public <<OverrideType>> <<ReturnType>> <<PropertyName>> { <<GetStatement>><<SetStatement>> }
+        public <<OverrideType>> <<ReturnType>> <<PropertyName>> {<<GetStatement>><<SetStatement>> }

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
+using System;
 
 namespace AutoCompose.Generator.AutoCompose
 {
@@ -80,18 +81,87 @@ namespace AutoCompose.Generator.AutoCompose
         public static ClassRenderModel Parse(IGeneratorExecutionContext context, ClassDeclarationSyntax autoComposedClass)
         {
             // e.g. "_sample", "ISample"
-            var autoComposeInfo = autoComposedClass.GetAutoComposeInfo();
+            var autoComposeInfo = autoComposedClass.GetAutoComposeInfo(context);
+            if (autoComposeInfo is null)
+            {
+                throw new InvalidOperationException($"Failed to extract AutoCompose information from class '{autoComposedClass.Identifier.ValueText}'. Ensure the class is decorated with [AutoCompose(typeof(TargetType), \"memberName\")].");
+            }
 
-            // e.g. all the definitions of ISample
-            var targetNodes = context.GetSyntaxNodes(autoComposeInfo.TargetType).ToList();
+            // Use the symbol if we already have it from GetAutoComposeInfo (avoids redundant lookup)
+            INamedTypeSymbol targetSymbol = autoComposeInfo.TargetSymbol;
 
-            // e.g. the specific definition of ISample
-            var targetSymbol = context.GetDependentSymbol(autoComposedClass, targetNodes).GuardNull();
+            // If targetSymbol is an error type, treat it as null to trigger fallbacks
+            if (targetSymbol != null && targetSymbol.TypeKind == TypeKind.Error)
+            {
+                targetSymbol = null;
+            }
+
+            // If we don't have the symbol yet, try to get it using the various lookup methods
+            if (targetSymbol is null)
+            {
+                // Try to get the type symbol directly from the typeof expression using semantic model
+                // This is the most accurate method and works for both project types and external types
+                targetSymbol = context.GetTypeSymbolFromTypeOfExpression(autoComposedClass, autoComposeInfo.TargetType);
+
+                // If not found via semantic model, try syntax tree search (for types defined in the project)
+                if (targetSymbol is null || targetSymbol.TypeKind == TypeKind.Error)
+                {
+                    var targetNodes = context.GetSyntaxNodes(autoComposeInfo.TargetType).ToList();
+                    if (targetNodes.Any())
+                    {
+                        var candidateSymbol = context.GetDependentSymbol(autoComposedClass, targetNodes);
+                        // Only use the candidate if it's not an error type
+                        if (candidateSymbol != null && candidateSymbol.TypeKind != TypeKind.Error)
+                        {
+                            targetSymbol = candidateSymbol;
+                        }
+                    }
+                }
+
+                // If still not found, try to get from compilation (for types from NuGet packages/external assemblies)
+                if (targetSymbol is null || targetSymbol.TypeKind == TypeKind.Error)
+                {
+                    // Try to infer namespace from the autoComposed class's namespace or using directives
+                    var autoComposedSymbol = context.GetSymbol(autoComposedClass);
+                    var namespaceHint = autoComposedSymbol?.ContainingNamespace?.ToDisplayString();
+                    
+                    var candidateSymbol = context.GetTypeSymbolFromCompilation(autoComposeInfo.TargetType, namespaceHint);
+                    // Only use the candidate if it's not an error type
+                    if (candidateSymbol != null && candidateSymbol.TypeKind != TypeKind.Error)
+                    {
+                        targetSymbol = candidateSymbol;
+                    }
+                }
+            }
+
+            // Provide a meaningful error if we still can't find the type
+            if (targetSymbol is null)
+            {
+                var className = autoComposedClass.Identifier.ValueText;
+                var targetTypeName = autoComposeInfo.TargetType;
+                var location = autoComposedClass.GetLocation();
+                var errorMessage = $"AutoCompose: Could not find type '{targetTypeName}' for class '{className}'. " +
+                    $"The type may be from a NuGet package or external assembly. " +
+                    $"Ensure the type '{targetTypeName}' is accessible and the necessary using directives are present. " +
+                    $"If '{targetTypeName}' is from a NuGet package, make sure the package is referenced in your project.";
+
+                throw new InvalidOperationException(errorMessage);
+            }
+
+            // Verify the target symbol is an interface or abstract class
+            if (targetSymbol.TypeKind != TypeKind.Interface && !(targetSymbol.TypeKind == TypeKind.Class && targetSymbol.IsAbstract))
+            {
+                var className = autoComposedClass.Identifier.ValueText;
+                var targetTypeName = autoComposeInfo.TargetType;
+                throw new InvalidOperationException(
+                    $"AutoCompose: Type '{targetTypeName}' used in class '{className}' must be an interface or abstract class. " +
+                    $"Current type kind: {targetSymbol.TypeKind}.");
+            }
 
             // create the parser
-            var parser = Create(autoComposeInfo.GuardNull(),
-                autoComposedClass.GuardNull(),
-                targetSymbol.GuardNull());
+            var parser = Create(autoComposeInfo,
+                autoComposedClass,
+                targetSymbol);
 
             // parse to create the model
             return parser.Parse(context);
@@ -125,6 +195,119 @@ namespace AutoCompose.Generator.AutoCompose
         }
 
         /// <summary>
+        /// Extracts and adds the namespace from a type symbol to the render model's namespace usings.
+        /// Handles nullable types, arrays, and nested generic types.
+        /// </summary>
+        private void ExtractNamespaceFromParameterType(ITypeSymbol typeSymbol)
+        {
+            if (typeSymbol == null)
+                return;
+
+            ITypeSymbol typeToCheck = typeSymbol;
+            
+            // Unwrap nullable types (e.g., int?)
+            if (typeToCheck is INamedTypeSymbol namedType && namedType.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
+            {
+                typeToCheck = namedType.TypeArguments.FirstOrDefault();
+                if (typeToCheck == null)
+                    return;
+            }
+            
+            // Get the underlying type for arrays (e.g., int[])
+            if (typeToCheck is IArrayTypeSymbol arrayType)
+            {
+                typeToCheck = arrayType.ElementType;
+            }
+            
+            // Handle named types (interfaces, classes, structs, etc.)
+            if (typeToCheck is INamedTypeSymbol namedTypeSymbol)
+            {
+                // Use OriginalDefinition to get the actual type definition, not a reference
+                // This ensures we get the correct namespace even if the type was referenced via using
+                var originalType = namedTypeSymbol.OriginalDefinition ?? namedTypeSymbol;
+                
+                // Add namespace for the main type
+                AddNamespaceFromSymbol(originalType);
+                
+                // Recursively handle type arguments (e.g., List<MyClass> should add namespaces for both List and MyClass)
+                foreach (var typeArg in namedTypeSymbol.TypeArguments)
+                {
+                    ExtractNamespaceFromParameterType(typeArg);
+                }
+            }
+            else
+            {
+                // For non-named types, try to extract namespace directly
+                AddNamespaceFromSymbol(typeToCheck);
+            }
+        }
+
+        /// <summary>
+        /// Adds the namespace of a type symbol to the render model's namespace usings.
+        /// </summary>
+        private void AddNamespaceFromSymbol(ITypeSymbol typeSymbol)
+        {
+            if (typeSymbol == null)
+                return;
+
+            var containingNamespace = typeSymbol.ContainingNamespace;
+            if (containingNamespace == null)
+                return;
+            
+            // Build the namespace by traversing up the namespace chain
+            // This works even when IsGlobalNamespace is incorrectly true
+            var namespaceParts = new List<string>();
+            var ns = containingNamespace;
+            
+            while (ns != null)
+            {
+                // Skip if it's actually the global namespace
+                if (ns.IsGlobalNamespace && string.IsNullOrEmpty(ns.Name))
+                    break;
+                    
+                // Get the namespace name - prefer Name property, fall back to ToString()
+                var nsName = !string.IsNullOrEmpty(ns.Name) ? ns.Name : null;
+                if (string.IsNullOrEmpty(nsName))
+                {
+                    var nsString = ns.ToString();
+                    if (!string.IsNullOrWhiteSpace(nsString) && nsString != "<global namespace>")
+                    {
+                        // If ToString() gives us the full namespace, use it
+                        if (nsString.Contains("."))
+                        {
+                            // It's already the full namespace, use it
+                            var namespaceStringJMagel = nsString;
+                            if (namespaceStringJMagel != _renderModel.ContainingNamespace)
+                            {
+                                _renderModel.NamespaceUsings.Add(namespaceStringJMagel);
+                            }
+                            return;
+                        }
+                        nsName = nsString;
+                    }
+                }
+                
+                if (!string.IsNullOrEmpty(nsName) && nsName != "<global namespace>")
+                {
+                    namespaceParts.Insert(0, nsName);
+                }
+                
+                ns = ns.ContainingNamespace;
+            }
+            
+            if (namespaceParts.Count == 0)
+                return;
+            
+            var namespaceString = string.Join(".", namespaceParts);
+            
+            // Validate and add the namespace (skip if it's the same as the containing namespace)
+            if (namespaceString != _renderModel.ContainingNamespace)
+            {
+                _renderModel.NamespaceUsings.Add(namespaceString);
+            }
+        }
+
+        /// <summary>
         /// Parsed the methods, retrieving names, return types, arguments, etc. and adding them to the renderModel.
         /// </summary>
         private void ParseMethods(IGeneratorExecutionContext context, List<IMethodSymbol> membersToImplement)
@@ -146,19 +329,56 @@ namespace AutoCompose.Generator.AutoCompose
 
                 foreach (var methodParameter in methodParameters)
                 {
-                    // e.g. for a methodParameter like IBaseA, methodParamTypes would be the definition of that type
-                    // since we only support finding a single type (i.e. a single definition of IBaseA in the project
-                    // we won't consider multiples
-                    var methodParamTypes = context.GetSyntaxNodes(methodParameter.Type.Name).ToList();
-
-                    // e.g. for Method1(IExample example), this would be the INamedTypeSymbol for IExample
-                    var methodParamSymbol = context.GetDependentSymbol(_autoComposedClass, methodParamTypes);
-
-                    // track the namespace
-                    if (methodParamSymbol is not null)
+                    // Extract namespace from parameter type for using statements
+                    // Get the type from the interface's declaration syntax to ensure we have correct namespace info
+                    ITypeSymbol parameterType = null;
+                    
+                    // Try to get the type from the interface's declaration syntax (where the method is defined)
+                    if (_targetSymbol.DeclaringSyntaxReferences.Length > 0)
                     {
-                        _renderModel.NamespaceUsings.Add(methodParamSymbol.ContainingNamespace.ToDisplayString());
+                        var syntaxRef = _targetSymbol.DeclaringSyntaxReferences[0];
+                        var syntax = syntaxRef.GetSyntax();
+                        
+                        if (syntax is InterfaceDeclarationSyntax interfaceSyntax)
+                        {
+                            // Find the method declaration in the interface
+                            var methodDecl = interfaceSyntax.Members
+                                .OfType<MethodDeclarationSyntax>()
+                                .FirstOrDefault(m => m.Identifier.ValueText == member.Name);
+                            
+                            if (methodDecl != null)
+                            {
+                                var paramIndex = methodParameters.IndexOf(methodParameter);
+                                if (paramIndex >= 0 && paramIndex < methodDecl.ParameterList.Parameters.Count)
+                                {
+                                    var paramSyntax = methodDecl.ParameterList.Parameters[paramIndex];
+                                    if (paramSyntax.Type != null)
+                                    {
+                                        var semanticModel = context.Compilation.GetSemanticModel(syntaxRef.SyntaxTree);
+                                        var typeInfo = semanticModel.GetTypeInfo(paramSyntax.Type);
+                                        if (typeInfo.Type != null)
+                                        {
+                                            parameterType = typeInfo.Type;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
+                    
+                    // Fallback to the parameter's type if we couldn't get it from syntax
+                    if (parameterType == null)
+                    {
+                        parameterType = methodParameter.Type;
+                    }
+                    
+                    // Try to get the original definition to ensure correct namespace
+                    if (parameterType is INamedTypeSymbol namedType && namedType.OriginalDefinition != null)
+                    {
+                        parameterType = namedType.OriginalDefinition;
+                    }
+                    
+                    ExtractNamespaceFromParameterType(parameterType);
 
                     // generate the call info
                     var type = methodParameter.Type.ToRenderString();
@@ -320,8 +540,31 @@ namespace AutoCompose.Generator.AutoCompose
                     x.MethodKind != MethodKind.PropertySet)
                 .ToList();
 
-            _renderModel.NamespaceUsings.AddRange(methodsToImplement.Select(x => x.ContainingNamespace.ToString()).ToList());
-            _renderModel.NamespaceUsings.AddRange(propertiesToImplement.Select(x => x.ContainingNamespace.ToString()).ToList());
+            foreach (var method in methodsToImplement)
+            {
+                var containingNamespace = method.ContainingNamespace;
+                if (containingNamespace is not null && !containingNamespace.IsGlobalNamespace)
+                {
+                    var namespaceString = containingNamespace.ToString();
+                    if (!string.IsNullOrWhiteSpace(namespaceString) && namespaceString != "<global namespace>")
+                    {
+                        _renderModel.NamespaceUsings.Add(namespaceString);
+                    }
+                }
+            }
+            
+            foreach (var property in propertiesToImplement)
+            {
+                var containingNamespace = property.ContainingNamespace;
+                if (containingNamespace is not null && !containingNamespace.IsGlobalNamespace)
+                {
+                    var namespaceString = containingNamespace.ToString();
+                    if (!string.IsNullOrWhiteSpace(namespaceString) && namespaceString != "<global namespace>")
+                    {
+                        _renderModel.NamespaceUsings.Add(namespaceString);
+                    }
+                }
+            }
 
             return (methodsToImplement, propertiesToImplement);
         }

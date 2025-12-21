@@ -10,7 +10,7 @@
         <CompilerGeneratedFilesOutputPath>Generated\$(TargetFramework)</CompilerGeneratedFilesOutputPath>
         <LangVersion>latest</LangVersion>
         <PackageId>Farskeptic.AutoCompose</PackageId>
-        <PackageVersion>1.0.2</PackageVersion>
+        <PackageVersion>1.0.3-dev6</PackageVersion>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <PackageOutputPath>C:\DevTools\NuGetPackages</PackageOutputPath>
         <NoPackageAnalysis>true</NoPackageAnalysis>

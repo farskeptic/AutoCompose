@@ -4,16 +4,17 @@
 // </auto-generated> 
 
 using AutoCompose.Sample.X03;
+using System;
 
 namespace AutoCompose.Host.Providers
 {
     public partial class AutoComposedA
     {
 
-        public virtual int Prop1 {  get { return _baseA.Prop1; }  }
+        public virtual int Prop1 { get { return _baseA.Prop1; } }
 
 
-        public virtual int Prop2 {  get { return _baseA.Prop2; }  set { _baseA.Prop2 = value; } }
+        public virtual int Prop2 { get { return _baseA.Prop2; } set { _baseA.Prop2 = value; } }
 
 
 

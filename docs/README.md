@@ -48,7 +48,7 @@ AutoCompose runs at compile time, and generates the source required to fully imp
 
 When trying to decide between inheritance or composition, the amount of pass-thru code that must be coded and maintained often plays a role in the decision.
 
-Example: When we need to override the implementation of a single method for an interface that contains 10 methods, the code burden of implementing and maintaing the 9 pass-thru methods often causes developers to choose inheritance over composition, regardless of other considerations.
+Example: When we need to override the implementation of a single method for an interface that contains 10 methods, the code burden of implementing and maintaining the 9 pass-thru methods often causes developers to choose inheritance over composition, regardless of other considerations.
 
 **With AutoCompose, this issue goes away.  The developer is free to choose inheritance or composition for purely architectural reasons, without having to worry about implementation or maintenance difficulties.**
 

@@ -3,7 +3,7 @@
 // WARNING: THIS CODE IS AUTO-GENERATED AT COMPILE-TIME.  ANY CHANGES WILL BE OVERWRITTEN ON NEXT COMPILE.
 // </auto-generated> 
 
-
+using System;
 
 namespace AutoCompose.Sample.M04
 {
